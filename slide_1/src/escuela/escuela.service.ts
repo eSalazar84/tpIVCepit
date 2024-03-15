@@ -7,20 +7,19 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class EscuelaService {
-  private escuelas: Escuela[] = [];
 
-  constructor(@InjectRepository(Escuela)
-  private readonly escuelaRepository: Repository<Escuela>) { }
+  constructor(@InjectRepository(Escuela) private readonly escuelaRepository: Repository<Escuela>) { }
 
-  create(createEscuelaDto: CreateEscuelaDto) {
-    return 'This action adds a new escuela';
+  async createEscuela(createEscuela: CreateEscuelaDto): Promise<CreateEscuelaDto> {
+    const newEscuela = await this.escuelaRepository.create(createEscuela)
+    return this.escuelaRepository.save(newEscuela)
   }
 
-  async findAll(): Promise<Escuela[]> {
+  async findAllEscuela(): Promise<Escuela[]> {
     return await this.escuelaRepository.find();
   }
 
-  async findOne(id: number): Promise<Escuela> {
+  async findOneEscuela(id: number): Promise<Escuela> {
     const query: FindOneOptions = { where: { idEscuela: id } }
     const escuelaFound: Escuela = await this.escuelaRepository.findOne(query)
     if (!escuelaFound) throw new HttpException({
@@ -30,11 +29,11 @@ export class EscuelaService {
     return escuelaFound;
   }
 
-  update(id: number, updateEscuelaDto: UpdateEscuelaDto) {
+  async updateEscuela(id: number, updateEscuelaDto: UpdateEscuelaDto) {
     return `This action updates a #${id} escuela`;
   }
 
-  remove(id: number) {
+  async removeEscuela(id: number) {
     return `This action removes a #${id} escuela`;
   }
 }

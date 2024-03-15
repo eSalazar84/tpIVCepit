@@ -1,34 +1,35 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe } from '@nestjs/common';
 import { EscuelaService } from './escuela.service';
 import { CreateEscuelaDto } from './dto/create-escuela.dto';
 import { UpdateEscuelaDto } from './dto/update-escuela.dto';
 
 @Controller('escuela')
 export class EscuelaController {
-  constructor(private readonly escuelaService: EscuelaService) {}
+  constructor(private readonly escuelaService: EscuelaService) { }
 
   @Post()
-  create(@Body() createEscuelaDto: CreateEscuelaDto) {
-    return this.escuelaService.create(createEscuelaDto);
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async createEscuela(@Body() createEscuelaDto: CreateEscuelaDto): Promise<CreateEscuelaDto> {
+    return this.escuelaService.createEscuela(createEscuelaDto);
   }
 
   @Get()
-  findAll() {
-    return this.escuelaService.findAll();
+  async findAllEscuela() {
+    return this.escuelaService.findAllEscuela();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.escuelaService.findOne(+id);
+  async findOneEscuela(@Param('id') id: string) {
+    return this.escuelaService.findOneEscuela(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEscuelaDto: UpdateEscuelaDto) {
-    return this.escuelaService.update(+id, updateEscuelaDto);
+  async updateEscuela(@Param('id') id: string, @Body() updateEscuelaDto: UpdateEscuelaDto) {
+    return this.escuelaService.updateEscuela(+id, updateEscuelaDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.escuelaService.remove(+id);
+  async removeEscuela(@Param('id') id: string) {
+    return this.escuelaService.removeEscuela(+id);
   }
 }

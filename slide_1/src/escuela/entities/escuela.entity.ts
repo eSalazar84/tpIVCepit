@@ -19,6 +19,8 @@ export class Escuela {
     getIdEscuela(): number { return this.idEscuela }
     getNombreEscuela(): string { return this.nombre }
     getDomicilioEscuela(): string { return this.domicilio }
+
+    setIdEscuela(idEscuela: number): number { return this.idEscuela = idEscuela }
     setNombreEscuela(nombre: string): string { return this.nombre = nombre }
     setDomicilioEscuela(domicilio: string): string { return this.domicilio = domicilio }
 
