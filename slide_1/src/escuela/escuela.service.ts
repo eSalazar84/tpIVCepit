@@ -7,11 +7,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class EscuelaService {
-
   constructor(@InjectRepository(Escuela) private readonly escuelaRepository: Repository<Escuela>) { }
 
-  async createEscuela(createEscuela: CreateEscuelaDto): Promise<CreateEscuelaDto> {
-    const newEscuela = await this.escuelaRepository.create(createEscuela)
+  async createEscuela(escuela: CreateEscuelaDto): Promise<Escuela> {
+    const newEscuela = this.escuelaRepository.create(new Escuela(escuela.nombre,escuela.domicilio))
     return this.escuelaRepository.save(newEscuela)
   }
 

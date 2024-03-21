@@ -9,7 +9,7 @@ import { FindOneOptions, Repository } from 'typeorm';
 export class CiudadService {
   constructor(@InjectRepository(Ciudad) private readonly ciudadRepository: Repository<Ciudad>) { }
 
-  async createCiudad(ciudad: CreateCiudadDto): Promise<CreateCiudadDto> {
+  async createCiudad(ciudad: CreateCiudadDto): Promise<Ciudad> {
     const { nombre }: CreateCiudadDto = ciudad;
     const query = await this.ciudadRepository.findOne({ where: { nombre } })
     if (query) throw new HttpException({

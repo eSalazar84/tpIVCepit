@@ -12,4 +12,5 @@ export class CreateEscuelaDto {
     @Expose()
     @IsNotEmpty()
     readonly domicilio: string
+
 }

@@ -7,10 +7,10 @@ export class UpdateEscuelaDto extends PartialType(CreateEscuelaDto) {
     @IsString()
     @Expose()
     @IsNotEmpty()
-    readonly nombre: string
+    readonly nombre?: string
 
     @IsString()
     @Expose()
     @IsNotEmpty()
-    readonly domicilio: string
+    readonly domicilio?: string
 }
