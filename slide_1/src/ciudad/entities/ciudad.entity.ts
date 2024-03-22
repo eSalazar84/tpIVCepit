@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Escuela } from "src/escuela/entities/escuela.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Ciudad {
@@ -8,6 +9,9 @@ export class Ciudad {
 
     @Column({ unique: true })
     private nombre: string
+
+    @OneToMany(() => Escuela, escuela => escuela.getIdEscuela)
+    public escuela: Escuela[];
 
     constructor(nombre: string) {
         this.nombre = nombre;

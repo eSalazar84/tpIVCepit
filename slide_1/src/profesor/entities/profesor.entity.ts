@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Clase } from "src/clase/entities/clase.entity";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
 
 @Entity()
 export class Profesor {
@@ -11,16 +12,19 @@ export class Profesor {
     @Column({ type: 'varchar' })
     private apellido: string
 
+    @OneToMany(() => Clase, clase => clase.getIdClase)
+    public clase: Clase[]
+
     constructor(nombre: string, apellido: string) {
         this.nombre = nombre;
         this.apellido = apellido
     }
 
-    getIdProfesor(): number { return this.idProfesor }
-    getNombreProfesor(): string { return this.nombre }
-    getApellidoProfesor(): string { return this.apellido }
+    public getIdProfesor(): number { return this.idProfesor }
+    public getNombreProfesor(): string { return this.nombre }
+    public getApellidoProfesor(): string { return this.apellido }
 
-    setIdProfesor(idProfesor: number): number { return this.idProfesor = idProfesor }
-    setNombreProfesor(nombre: string): string { return this.nombre = nombre }
-    setApellidoProfesor(apellido: string): string { return this.apellido = apellido }
+    public setIdProfesor(idProfesor: number): number { return this.idProfesor = idProfesor }
+    public setNombreProfesor(nombre: string): string { return this.nombre = nombre }
+    public setApellidoProfesor(apellido: string): string { return this.apellido = apellido }
 }

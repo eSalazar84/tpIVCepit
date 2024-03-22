@@ -5,6 +5,7 @@ import { EscuelaModule } from './escuela/escuela.module';
 import { EstudianteModule } from './estudiante/estudiante.module';
 import { ProfesorModule } from './profesor/profesor.module';
 import { join } from 'path';
+import { ClaseModule } from './clase/clase.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -18,7 +19,7 @@ import { join } from 'path';
       join(__dirname, '/**/*.entity{.js,.ts}')
     ],
     synchronize: true
-  }), CiudadModule, EscuelaModule, EstudianteModule, ProfesorModule],
+  }), CiudadModule, EscuelaModule, EstudianteModule, ProfesorModule, ClaseModule],
   controllers: [],
   providers: [],
 })
