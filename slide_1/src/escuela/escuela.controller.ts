@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe, ParseIntPipe, HttpStatus } from '@nestjs/common';
 import { EscuelaService } from './escuela.service';
 import { CreateEscuelaDto } from './dto/create-escuela.dto';
 import { UpdateEscuelaDto } from './dto/update-escuela.dto';
@@ -14,22 +14,25 @@ export class EscuelaController {
   }
 
   @Get()
-  async findAllEscuela() {
+  async findAllEscuela(): Promise<CreateEscuelaDto[]> {
     return this.escuelaService.findAllEscuela();
   }
 
   @Get(':id')
-  async findOneEscuela(@Param('id') id: string) {
-    return this.escuelaService.findOneEscuela(+id);
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async findOneEscuela(@Param('id', new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE })) id: number): Promise<CreateEscuelaDto> {
+    return this.escuelaService.findOneEscuela(id);
   }
 
   @Patch(':id')
-  async updateEscuela(@Param('id') id: string, @Body() updateEscuelaDto: UpdateEscuelaDto) {
-    return this.escuelaService.updateEscuela(+id, updateEscuelaDto);
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async updateEscuela(@Param('id', new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE })) id: number, @Body() updateEscuelaDto: UpdateEscuelaDto): Promise<CreateEscuelaDto> {
+    return this.escuelaService.updateEscuela(id, updateEscuelaDto);
   }
 
   @Delete(':id')
-  async removeEscuela(@Param('id') id: string) {
-    return this.escuelaService.removeEscuela(+id);
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async removeEscuela(@Param('id', new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE })) id: number): Promise<CreateEscuelaDto> {
+    return this.escuelaService.removeEscuela(id);
   }
 }

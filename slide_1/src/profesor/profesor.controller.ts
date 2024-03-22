@@ -1,34 +1,38 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe, ParseIntPipe, HttpStatus } from '@nestjs/common';
 import { ProfesorService } from './profesor.service';
 import { CreateProfesorDto } from './dto/create-profesor.dto';
 import { UpdateProfesorDto } from './dto/update-profesor.dto';
 
 @Controller('profesor')
 export class ProfesorController {
-  constructor(private readonly profesorService: ProfesorService) {}
+  constructor(private readonly profesorService: ProfesorService) { }
 
   @Post()
-  create(@Body() createProfesorDto: CreateProfesorDto) {
-    return this.profesorService.create(createProfesorDto);
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async createProfesor(@Body() createProfesorDto: CreateProfesorDto): Promise<CreateProfesorDto> {
+    return this.profesorService.createProfesor(createProfesorDto);
   }
 
   @Get()
-  findAll() {
-    return this.profesorService.findAll();
+  async findAllProfesor(): Promise<CreateProfesorDto[]> {
+    return this.profesorService.findAllProfesor();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.profesorService.findOne(+id);
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async findOneProfesor(@Param('id', new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE })) id: number): Promise<CreateProfesorDto> {
+    return this.profesorService.findOneProfesor(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProfesorDto: UpdateProfesorDto) {
-    return this.profesorService.update(+id, updateProfesorDto);
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async updateProfesor(@Param('id', new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE })) id: number, @Body() updateProfesorDto: UpdateProfesorDto): Promise<CreateProfesorDto> {
+    return this.profesorService.updateProfesor(id, updateProfesorDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.profesorService.remove(+id);
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async removeProfesor(@Param('id', new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE })) id: number): Promise<CreateProfesorDto> {
+    return this.profesorService.removeProfesor(id);
   }
 }

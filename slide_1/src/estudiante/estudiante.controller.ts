@@ -1,34 +1,38 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe, ParseIntPipe, HttpStatus } from '@nestjs/common';
 import { EstudianteService } from './estudiante.service';
 import { CreateEstudianteDto } from './dto/create-estudiante.dto';
 import { UpdateEstudianteDto } from './dto/update-estudiante.dto';
 
 @Controller('estudiante')
 export class EstudianteController {
-  constructor(private readonly estudianteService: EstudianteService) {}
+  constructor(private readonly estudianteService: EstudianteService) { }
 
   @Post()
-  create(@Body() createEstudianteDto: CreateEstudianteDto) {
-    return this.estudianteService.create(createEstudianteDto);
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async createEstudiante(@Body() createEstudianteDto: CreateEstudianteDto): Promise<CreateEstudianteDto> {
+    return this.estudianteService.createEstudiante(createEstudianteDto);
   }
 
   @Get()
-  findAll() {
-    return this.estudianteService.findAll();
+  async findAllEstudiante(): Promise<CreateEstudianteDto[]> {
+    return this.estudianteService.findAllEstudiante();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.estudianteService.findOne(+id);
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async findOneEstudiante(@Param('id', new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE })) id: number): Promise<CreateEstudianteDto> {
+    return this.estudianteService.findOneEstudiante(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEstudianteDto: UpdateEstudianteDto) {
-    return this.estudianteService.update(+id, updateEstudianteDto);
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async updateEstudiante(@Param('id', new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE })) id: number, @Body() updateEstudianteDto: UpdateEstudianteDto): Promise<CreateEstudianteDto> {
+    return this.estudianteService.updateEstudiante(+id, updateEstudianteDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.estudianteService.remove(+id);
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async removeEstudiante(@Param('id', new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE })) id: number): Promise<CreateEstudianteDto> {
+    return this.estudianteService.removeEstudiante(+id);
   }
 }

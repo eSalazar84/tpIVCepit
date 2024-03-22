@@ -1,5 +1,4 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
-import { CreateEscuelaDto } from "../dto/create-escuela.dto";
 
 @Entity()
 export class Escuela {
@@ -7,10 +6,10 @@ export class Escuela {
     private idEscuela: number
 
     @Column({ type: 'varchar' })
-     nombre: string
+    private nombre: string
 
     @Column({ type: 'varchar' })
-     domicilio: string
+    private domicilio: string
 
     constructor(nombre: string, domicilio: string) {
         this.nombre = nombre;
@@ -24,7 +23,4 @@ export class Escuela {
     public setIdEscuela(idEscuela: number): number { return this.idEscuela = idEscuela }
     public setNombreEscuela(nombre: string): string { return this.nombre = nombre }
     public setDomicilioEscuela(domicilio: string): string { return this.domicilio = domicilio }
-
-
-
 }

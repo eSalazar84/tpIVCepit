@@ -4,10 +4,10 @@ import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 export class Ciudad {
 
     @PrimaryGeneratedColumn()
-    idCiudad: number
+    private idCiudad: number
 
     @Column({ unique: true })
-    nombre: string
+    private nombre: string
 
     constructor(nombre: string) {
         this.nombre = nombre;

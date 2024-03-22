@@ -7,21 +7,21 @@ import { Profesor } from './entities/profesor.entity';
 
 @Injectable()
 export class ProfesorService {
-
   constructor(@InjectRepository(Profesor)
-  private readonly profesorRepository: Repository<Profesor>) { }
+  private readonly profesorRepository: Repository<CreateProfesorDto>) { }
 
-  create(createProfesorDto: CreateProfesorDto) {
-    return 'This action adds a new profesor';
+  async createProfesor(createProfesorDto: CreateProfesorDto): Promise<CreateProfesorDto> {
+    const newProfesor = this.profesorRepository.create(createProfesorDto)
+    return this.profesorRepository.save(newProfesor)
   }
 
-  async findAll(): Promise<Profesor[]> {
+  async findAllProfesor(): Promise<CreateProfesorDto[]> {
     return await this.profesorRepository.find();
   }
 
-  async findOne(id: number): Promise<Profesor> {
+  async findOneProfesor(id: number): Promise<CreateProfesorDto> {
     const query: FindOneOptions = { where: { idProfesor: id } }
-    const profesorFound: Profesor = await this.profesorRepository.findOne(query)
+    const profesorFound = await this.profesorRepository.findOne(query)
     if (!profesorFound) throw new HttpException({
       status: HttpStatus.NOT_FOUND,
       error: 'Profesor not found'
@@ -29,11 +29,25 @@ export class ProfesorService {
     return profesorFound
   }
 
-  update(id: number, updateProfesorDto: UpdateProfesorDto) {
-    return `This action updates a #${id} profesor`;
+  async updateProfesor(id: number, updateProfesorDto: UpdateProfesorDto): Promise<CreateProfesorDto> {
+    const query: FindOneOptions = { where: { idProfesor: id } }
+    const profesorFound = await this.profesorRepository.findOne(query)
+    if (!profesorFound) throw new HttpException({
+      status: HttpStatus.NOT_FOUND,
+      error: 'Profesor not found'
+    }, HttpStatus.NOT_FOUND)
+    const updateCiudad = Object.assign(profesorFound, updateProfesorDto)
+    return updateCiudad
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} profesor`;
+  async removeProfesor(id: number): Promise<CreateProfesorDto> {
+    const query: FindOneOptions = { where: { idProfesor: id } }
+    const profesorFound = await this.profesorRepository.findOne(query)
+    if (!profesorFound) throw new HttpException({
+      status: HttpStatus.NOT_FOUND,
+      error: 'Profesor not found'
+    }, HttpStatus.NOT_FOUND)
+    const removeProfesor = this.profesorRepository.remove(profesorFound)
+    return removeProfesor
   }
 }

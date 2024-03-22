@@ -19,6 +19,7 @@ export class CiudadController {
   }
 
   @Get(':id')
+  @UsePipes(new ValidationPipe({ transform: true }))
   async findOneCiudad(@Param('id', new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE })) id: number): Promise<CreateCiudadDto> {
     return this.ciudadService.findOneCiudad(id);
   }
@@ -30,7 +31,8 @@ export class CiudadController {
   }
 
   @Delete(':id')
-  async removeCiudad(@Param('id', new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE })) id: number):Promise<Boolean> {
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async removeCiudad(@Param('id', new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE })) id: number):Promise<CreateCiudadDto> {
     return this.ciudadService.removeCiudad(id);
   }
 }

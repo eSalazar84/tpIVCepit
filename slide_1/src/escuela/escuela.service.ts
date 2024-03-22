@@ -7,20 +7,20 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class EscuelaService {
-  constructor(@InjectRepository(Escuela) private readonly escuelaRepository: Repository<Escuela>) { }
+  constructor(@InjectRepository(Escuela) private readonly escuelaRepository: Repository<CreateEscuelaDto>) { }
 
-  async createEscuela(escuela: CreateEscuelaDto): Promise<Escuela> {
-    const newEscuela = this.escuelaRepository.create(new Escuela(escuela.nombre,escuela.domicilio))
+  async createEscuela(escuela: CreateEscuelaDto): Promise<CreateEscuelaDto> {
+    const newEscuela = this.escuelaRepository.create(escuela)
     return this.escuelaRepository.save(newEscuela)
   }
 
-  async findAllEscuela(): Promise<Escuela[]> {
+  async findAllEscuela(): Promise<CreateEscuelaDto[]> {
     return await this.escuelaRepository.find();
   }
 
-  async findOneEscuela(id: number): Promise<Escuela> {
+  async findOneEscuela(id: number): Promise<CreateEscuelaDto> {
     const query: FindOneOptions = { where: { idEscuela: id } }
-    const escuelaFound: Escuela = await this.escuelaRepository.findOne(query)
+    const escuelaFound = await this.escuelaRepository.findOne(query)
     if (!escuelaFound) throw new HttpException({
       status: HttpStatus.NOT_FOUND, error: 'School not found'
     },
@@ -28,11 +28,25 @@ export class EscuelaService {
     return escuelaFound;
   }
 
-  async updateEscuela(id: number, updateEscuelaDto: UpdateEscuelaDto) {
-    return `This action updates a #${id} escuela`;
+  async updateEscuela(id: number, updateEscuelaDto: UpdateEscuelaDto): Promise<CreateEscuelaDto> {
+    const query: FindOneOptions = { where: { idEscuela: id } }
+    const escuelaFound = await this.escuelaRepository.findOne(query)
+    if (!escuelaFound) throw new HttpException({
+      status: HttpStatus.NOT_FOUND, error: 'School not found'
+    },
+      HttpStatus.NOT_FOUND)
+    const updateEscuela = Object.assign(escuelaFound, updateEscuelaDto)
+    return updateEscuela
   }
 
-  async removeEscuela(id: number) {
-    return `This action removes a #${id} escuela`;
+  async removeEscuela(id: number): Promise<CreateEscuelaDto> {
+    const query: FindOneOptions = { where: { idEscuela: id } }
+    const escuelaFound = await this.escuelaRepository.findOne(query)
+    if (!escuelaFound) throw new HttpException({
+      status: HttpStatus.NOT_FOUND, error: 'School not found'
+    },
+      HttpStatus.NOT_FOUND)
+    const removeEscuela = this.escuelaRepository.remove(escuelaFound)
+    return removeEscuela;
   }
 }

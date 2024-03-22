@@ -19,6 +19,8 @@ export class Profesor {
     getIdProfesor(): number { return this.idProfesor }
     getNombreProfesor(): string { return this.nombre }
     getApellidoProfesor(): string { return this.apellido }
+
+    setIdProfesor(idProfesor: number): number { return this.idProfesor = idProfesor }
     setNombreProfesor(nombre: string): string { return this.nombre = nombre }
     setApellidoProfesor(apellido: string): string { return this.apellido = apellido }
 }

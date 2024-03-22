@@ -7,9 +7,9 @@ import { FindOneOptions, Repository } from 'typeorm';
 
 @Injectable()
 export class CiudadService {
-  constructor(@InjectRepository(Ciudad) private readonly ciudadRepository: Repository<Ciudad>) { }
+  constructor(@InjectRepository(Ciudad) private readonly ciudadRepository: Repository<CreateCiudadDto>) { }
 
-  async createCiudad(ciudad: CreateCiudadDto): Promise<Ciudad> {
+  async createCiudad(ciudad: CreateCiudadDto): Promise<CreateCiudadDto> {
     const { nombre }: CreateCiudadDto = ciudad;
     const query = await this.ciudadRepository.findOne({ where: { nombre } })
     if (query) throw new HttpException({
@@ -19,13 +19,13 @@ export class CiudadService {
     return this.ciudadRepository.save(newCiudad)
   }
 
-  async findAllCiudad(): Promise<Ciudad[]> {
+  async findAllCiudad(): Promise<CreateCiudadDto[]> {
     return await this.ciudadRepository.find();
   }
 
-  async findOneCiudad(id: number): Promise<Ciudad> {
+  async findOneCiudad(id: number): Promise<CreateCiudadDto> {
     const query: FindOneOptions = { where: { idCiudad: id } }
-    const ciudadFound: Ciudad = await this.ciudadRepository.findOne(query)
+    const ciudadFound = await this.ciudadRepository.findOne(query)
     if (!ciudadFound) throw new HttpException({
       status: HttpStatus.NOT_FOUND, error: 'City not found'
     },
@@ -33,9 +33,9 @@ export class CiudadService {
     return ciudadFound
   }
 
-  async updateCiudad(id: number, updateCiudadDto: UpdateCiudadDto): Promise<Ciudad> {
-    const ciudadFound: FindOneOptions<Ciudad> = { where: { idCiudad: id } }
-    const ciudad: Ciudad = await this.ciudadRepository.findOne(ciudadFound)
+  async updateCiudad(id: number, updateCiudadDto: UpdateCiudadDto): Promise<CreateCiudadDto> {
+    const ciudadFound: FindOneOptions = { where: { idCiudad: id } }
+    const ciudad = await this.ciudadRepository.findOne(ciudadFound)
     if (!ciudad) throw new HttpException({
       status: HttpStatus.NOT_FOUND, error: `City not found`
     }, HttpStatus.NOT_FOUND)
@@ -43,13 +43,13 @@ export class CiudadService {
     return this.ciudadRepository.save(updateCiudad)
   }
 
-  async removeCiudad(id: number): Promise<Boolean> {
-    const ciudadFound: FindOneOptions<Ciudad> = { where: { idCiudad: id } }
-    const ciudad: Ciudad = await this.ciudadRepository.findOne(ciudadFound)
+  async removeCiudad(id: number): Promise<CreateCiudadDto> {
+    const ciudadFound: FindOneOptions = { where: { idCiudad: id } }
+    const ciudad = await this.ciudadRepository.findOne(ciudadFound)
     if (!ciudad) throw new HttpException({
       status: HttpStatus.NOT_FOUND, error: `No se encuentra la ciudad`
     }, HttpStatus.NOT_FOUND)
-    await this.ciudadRepository.remove(ciudad)
-    return true
+    const removeCiudad = await this.ciudadRepository.remove(ciudad)
+    return removeCiudad
   }
 }

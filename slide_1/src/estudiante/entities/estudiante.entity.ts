@@ -20,11 +20,12 @@ export class Estudiante {
         this.fecha_nacimiento = fecha_nacimiento
     }
 
-    getIdEscuela(): number { return this.idEstudiante }
-    getNombreEstudiante(): string { return this.nombre }
-    getApellidoEstudiante(): string { return this.apellido }
-    getFecha_NacimientoEstudiante(): Date { return this.fecha_nacimiento }
-    settNombreEstudiante(nombre: string): string { return this.nombre = nombre }
-    setApellidoEstudiante(apellido: string): string { return this.apellido = apellido }
-    setFecha_NacimientoEstudiante(fecha_nacimiento: Date): Date { return this.fecha_nacimiento = fecha_nacimiento }
+    public getIdEscuela(): number { return this.idEstudiante }
+    public getNombreEstudiante(): string { return this.nombre }
+    public getApellidoEstudiante(): string { return this.apellido }
+    public getFecha_NacimientoEstudiante(): Date { return this.fecha_nacimiento }
+
+    public setNombreEstudiante(nombre: string): string { return this.nombre = nombre }
+    public setApellidoEstudiante(apellido: string): string { return this.apellido = apellido }
+    public setFecha_NacimientoEstudiante(fecha_nacimiento: Date): Date { return this.fecha_nacimiento = fecha_nacimiento }
 }

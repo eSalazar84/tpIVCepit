@@ -9,19 +9,20 @@ import { Estudiante } from './entities/estudiante.entity';
 export class EstudianteService {
 
   constructor(@InjectRepository(Estudiante)
-  private readonly estudianteRepository: Repository<Estudiante>) { }
+  private readonly estudianteRepository: Repository<CreateEstudianteDto>) { }
 
-  create(createEstudianteDto: CreateEstudianteDto) {
-    return 'This action adds a new estudiante';
+  async createEstudiante(createEstudianteDto: CreateEstudianteDto): Promise<CreateEstudianteDto> {
+    const newEstudiante = this.estudianteRepository.create(createEstudianteDto)
+    return this.estudianteRepository.save(newEstudiante)
   }
 
-  findAll(): Promise<Estudiante[]> {
+  async findAllEstudiante(): Promise<CreateEstudianteDto[]> {
     return this.estudianteRepository.find();
   }
 
-  async findOne(id: number): Promise<Estudiante> {
+  async findOneEstudiante(id: number): Promise<CreateEstudianteDto> {
     const query: FindOneOptions = { where: { idEstudiante: id } }
-    const estudianteFound: Estudiante = await this.estudianteRepository.findOne(query)
+    const estudianteFound: CreateEstudianteDto = await this.estudianteRepository.findOne(query)
     if (!estudianteFound) throw new HttpException({
       status: HttpStatus.NOT_FOUND,
       error: 'Estudiante not found'
@@ -29,11 +30,25 @@ export class EstudianteService {
     return estudianteFound
   }
 
-  update(id: number, updateEstudianteDto: UpdateEstudianteDto) {
-    return `This action updates a #${id} estudiante`;
+  async updateEstudiante(id: number, updateEstudianteDto: UpdateEstudianteDto): Promise<CreateEstudianteDto> {
+    const query: FindOneOptions = { where: { idEstudiante: id } }
+    const estudianteFound: CreateEstudianteDto = await this.estudianteRepository.findOne(query)
+    if (!estudianteFound) throw new HttpException({
+      status: HttpStatus.NOT_FOUND,
+      error: 'Estudiante not found'
+    }, HttpStatus.NOT_FOUND)
+    const updateEstudiante = Object.assign(estudianteFound, updateEstudianteDto)
+    return updateEstudiante;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} estudiante`;
+  async removeEstudiante(id: number): Promise<CreateEstudianteDto> {
+    const query: FindOneOptions = { where: { idEstudiante: id } }
+    const estudianteFound: CreateEstudianteDto = await this.estudianteRepository.findOne(query)
+    if (!estudianteFound) throw new HttpException({
+      status: HttpStatus.NOT_FOUND,
+      error: 'Estudiante not found'
+    }, HttpStatus.NOT_FOUND)
+    const removeEstudiante = await this.estudianteRepository.remove(estudianteFound)
+    return removeEstudiante
   }
 }
